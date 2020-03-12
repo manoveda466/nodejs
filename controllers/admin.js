@@ -30,13 +30,7 @@ exports.postAddProduct = (req, res, next) => {
         });
 
 }
-const products = [{
-    id: 1,
-    title: 'Book',
-    imageUrl: 'url',
-    price: '30',
-    description: 'Awesome Book',
-}];
+const products = [];
 
 exports.getProducts = (req, res, next) => {
     res.render('admin/products', {
