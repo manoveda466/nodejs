@@ -27,7 +27,8 @@
                                     </p>
                                 </div>
                                 <div class="card__actions">
-                                    <button class="btn">Add to Cart</button>
+                                    <a href="/products/<%= product.id %>" class="btn">Details</a>
+                                    <a href="/add-to-cart/<%= product.id %>" class="btn">Add to Cart</a>
                                 </div>
                             </article>
                             <% } %>
