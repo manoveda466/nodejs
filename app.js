@@ -12,6 +12,7 @@ app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 
 const errorController = require('./controllers/error');
 
@@ -21,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-    User.findById('5e6b5472ef5e0a18d8e80d86')
+    User.findById('5e6c84c0c3c6f11084fcb768')
         .then(user => {
             req.user = user;
             next();
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404Page);
 

@@ -50,6 +50,7 @@ exports.getCart = (req, res, next) => {
         .execPopulate()
         .then(user => {
             const products = user.cart.items;
+            console.log(products);
             res.render('shop/cart', {
                 products: products,
                 path: '/cart',
@@ -115,7 +116,7 @@ exports.postOrders = (req, res, next) => {
             return req.user.clearCart();
         })
         .then(() => {
-            res.redirect('/');
+            res.redirect('/orders');
         })
         .catch(err => {
             console.log(err);
