@@ -2,10 +2,23 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const MongodbStore = require('connect-mongodb-session')(session);
+const flash = require('connect-flash');
+
+const csrf = require('csurf');
 
 const mongoose = require('mongoose');
 
+const MONGODB_URI = 'mongodb+srv://manoj_db:Password!23@cluster0-zmswe.mongodb.net/nodedemo';
+
 const app = express();
+const store = new MongodbStore({
+    uri: MONGODB_URI,
+    collection: 'session'
+});
+
+const csrfProtction = csrf({});
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -20,9 +33,23 @@ const User = require('./models/user');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(
+    session({
+        secret: 'my secret',
+        resave: false,
+        saveUninitialized: false,
+        store: store
+    })
+);
+
+app.use(csrfProtction);
+app.use(flash());
 
 app.use((req, res, next) => {
-    User.findById('5e6c84c0c3c6f11084fcb768')
+    if (!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
         .then(user => {
             req.user = user;
             next();
@@ -32,24 +59,20 @@ app.use((req, res, next) => {
         });
 });
 
+app.use((req, res, next) => {
+    res.locals.isAuthentication = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(errorController.get404Page);
 
-mongoose.connect('mongodb+srv://manoj_db:Password!23@cluster0-zmswe.mongodb.net/nodedemo?retryWrites=true&w=majority')
+mongoose.connect(MONGODB_URI)
     .then(result => {
-        User.findOne()
-            .then(user => {
-                if (!user) {
-                    const user = new User({
-                        name: 'Manoj',
-                        email: 'manov14@yahoo.com'
-                    });
-                    user.save();
-                }
-            })
         app.listen(3000);
     })
     .catch(err => {

@@ -17,6 +17,8 @@
                 <p>
                     <%= product.description %>
                 </p>
-                <a href="/add-to-cart/<%= product.id %>" class="btn">Add to Cart</a>
+                <% if(isAuthentication) { %>
+                    <a href="/add-to-cart/<%= product.id %>" class="btn">Add to Cart</a>
+                    <% } %>
             </main>
             <%- include('../includes/end.ejs') %>
