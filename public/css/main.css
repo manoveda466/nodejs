@@ -258,3 +258,7 @@ form {
         width: 30rem;
     }
 }
+
+.has-error {
+    color: red;
+}
