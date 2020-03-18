@@ -18,8 +18,6 @@ router.get('/products', isAuth, adminController.getProducts);
 router.post('/add-product', isAuth, [
     body('title', 'Title should not be empty')
     .not().isEmpty(),
-    body('imageUrl', 'Enter valid URL')
-    .isURL(),
     body('price', 'Price should not be empty')
     .isNumeric(),
     body('description', 'Description should not be empty')
@@ -33,8 +31,6 @@ router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 router.post('/edit-product', isAuth, [
     body('title', 'Title should not be empty')
     .not().isEmpty(),
-    body('imageUrl', 'Enter valid URL')
-    .isURL(),
     body('price', 'Price should not be empty')
     .isNumeric(),
     body('description', 'Description should not be empty')

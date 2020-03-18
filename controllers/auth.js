@@ -60,7 +60,7 @@ exports.postSignUp = (req, res, next) => {
 
         })
         .catch((err) => {
-            console.log(err);
+            next(new Error(err));
         });
 }
 
@@ -114,7 +114,7 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/login');
                 })
                 .catch(err => {
-                    console.log(err);
+                    next(new Error(err));
                 })
         });
 }
@@ -150,7 +150,7 @@ exports.postResetPassword = (req, res, next) => {
         User.findOne({ email: req.body.email })
             .then(user => {
                 if (!user) {
-                    req.flash('error', 'No account with that emai found');
+                    req.flash('error', 'No account with that email found');
                     return res.redirect('/resetPassword');
                 }
 
@@ -171,7 +171,7 @@ exports.postResetPassword = (req, res, next) => {
                 })
             })
             .catch(err => {
-                console.log(err);
+                next(new Error(err));
             });
     });
 }
@@ -195,7 +195,7 @@ exports.getNewPassword = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            next(new Error(err));
         });
 }
 
@@ -220,6 +220,6 @@ exports.postNewPassword = (req, res, next) => {
             res.redirect('/');
         })
         .catch(err => {
-            console.log(err);
+            next(new Error(err));
         });
 }
