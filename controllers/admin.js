@@ -150,9 +150,13 @@ exports.getDeleteProduct = (req, res, next) => {
             return Product.deleteOne({ _id: prodId, userId: req.user._id });
         })
         .then(result => {
-            res.redirect('/admin/products');
+            res.status(200).json({
+                messgae: 'Success!'
+            });
         })
         .catch(err => {
-            next(new Error(err));
+            res.status(500).json({
+                message: 'Deleting product failed!'
+            })
         });
 }

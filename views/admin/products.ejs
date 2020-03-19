@@ -28,7 +28,8 @@
                                 </div>
                                 <div class="card__actions">
                                     <a href="/admin/edit-product/<%= product._id %>" class="btn">Edit</a>
-                                    <a href="/admin/delete-product/<%= product._id %>" class="btn">Delete</a>
+                                    <!-- <a href="/admin/delete-product/<%= product._id %>" class="btn">Delete</a> -->
+                                    <button class="btn" id="delete-product" value="<%= product._id %>" onclick="deleteProduct(this)">Delete</button>
                                 </div>
                             </article>
                             <% } %>
@@ -38,3 +39,25 @@
                         <% } %>
             </main>
             <%- include('../includes/end.ejs') %>
+
+                <script>
+                    const deleteProduct = (btn) => {
+                        const productId = $('#delete-product').val();
+                        const productElement = btn.closest('article');
+
+                        fetch('/admin/delete-product/' + productId, {
+                                method: 'GET',
+                                headers: {}
+                            })
+                            .then(result => {
+                                productElement.remove();
+                                const articleCount = $('.grid').find('article').length;
+                                if (articleCount < 1) {
+                                    $('.grid').html('<h1>No Products Found!</h1>');
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            });
+                    }
+                </script>
